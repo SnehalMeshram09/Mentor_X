@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hackathon Chatbot</title>
+  <style>
+    /* General Styles */
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #2a0139;
+      color: #fff;
+    }
+
+    /* Hero Section */
+    .hero {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+      min-height: 100vh;
+      gap: 50px;
+    }
+
+    .text-content {
+      max-width: 50%;
+      text-align: left;
+      margin-top: -50px;
+    }
+
+    .text-content h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+    }
+
+    .text-content .static-text {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ff0080;
+      margin-bottom: 20px;
+    }
+
+    .text-content p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .login {
+      background-color: #5a07a6;
+      color: #fff;
+    }
+
+    .signup {
+      background-color: #ff0080;
+      color: #fff;
+    }
+
+    .bot-image {
+      text-align: center;
+      margin-top: -120px;
+    }
+
+    .bot-image img {
+      max-width: 500px;
+      height: auto;
+      border: 5px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .bot-image img:hover {
+      transform: scale(1.1);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Popup Styles */
+    .popup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #f9f9f9; /* Soft, neutral background */
+  color: #333; /* Dark text for good readability */
+  padding: 20px 30px;
+  border-radius: 10px; /* Slightly rounded for modern feel */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Professional font family */
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+  max-width: 400px;
+  width: calc(100% - 40px);
+  z-index: 1000;
+  display: none;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.popup.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.popup p {
+  font-size: 1rem;
+  color: #555; /* Softer color for text */
+}
+
+.popup-btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 15px; /* Spacing between text and buttons */
+}
+
+.popup-btn-group button {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #ffffff; /* Neutral white background */
+  color: #333;
+  transition: background-color 0.3s ease, transform 0.3s ease, color 0.3s ease;
+}
+
+.popup-btn-group button:hover {
+  background-color: #f0f0f0; /* Slight highlight on hover */
+  color: #111; /* Darker text for contrast */
+  transform: scale(1.03);
+}
+
+.popup-btn-group button:focus {
+  outline: none;
+  border-color: #0073e6; /* Highlight border for accessibility */
+}
+
+.popup-btn-group button:active {
+  transform: scale(0.98);
+}
+
+.popup-btn-group button#allow-notifications {
+  background-color: #0073e6; /* Professional blue for positive action */
+  color: #ffffff;
+  border: none;
+}
+
+.popup-btn-group button#deny-notifications {
+  background-color: #ffffff; /* Clean red for negative action */
+  color: #0e0d0d;
+  border: none;
+}
+
+.popup-btn-group button#allow-notifications:hover {
+  background-color: #005bb5; /* Darker blue on hover */
+}
+
+.popup-btn-group button#deny-notifications:hover {
+  background-color: #d32f2f; /* Darker red on hover */
+}
+
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <div class="text-content">
+        <div class="static-text">Welcome to Hackathon Chatbot</div>
+        <h1>MentorX</h1>
+        <p>An innovative chatbot that connects participants with experienced mentors for guidance, advice, and expertise. It’s the future of personalized mentorship.</p>
+        <div class="button-group">
+          <button class="btn login" onclick="location.href='log.html'">Login</button>
+          <button class="btn signup" onclick="location.href='signup.html'">Sign Up</button>
+        </div>
+      </div>
+      <div class="bot-image">
+        <img src="robots.jpg" alt="Chat Bot" />
+      </div>
+    </section>
+  </main>
+
+  <!-- Popup for asking permission to send notifications -->
+  <div id="notification-popup" class="popup">
+    <p>Do you wish to receive web push notifications?</p>
+    <div class="popup-btn-group">
+      <button id="allow-notifications" class="btn">Allow</button>
+      <button id="deny-notifications" class="btn">Deny</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
+  <script>
+    window.onload = function () {
+      const popup = document.getElementById("notification-popup");
+      const allowBtn = document.getElementById("allow-notifications");
+      const denyBtn = document.getElementById("deny-notifications");
+
+      // Show popup with animation
+      setTimeout(() => {
+        popup.classList.add("show");
+      }, 500);
+
+      // Allow notifications
+      allowBtn.addEventListener("click", function () {
+        Notification.requestPermission().then(function (permission) {
+          if (permission === "granted") {
+            OneSignal.push(function () {
+              OneSignal.init({
+                appId: "YOUR_ONESIGNAL_APP_ID", // Replace with your OneSignal App ID
+              });
+              sendPushNotification();
+            });
+          }
+        });
+        popup.classList.remove("show");
+      });
+
+      // Deny notifications
+      denyBtn.addEventListener("click", function () {
+        console.log("Notification permission denied.");
+        popup.classList.remove("show");
+      });
+    };
+
+    function sendPushNotification() {
+      console.log("Sending web push notification...");
+      OneSignal.push(function () {
+        OneSignal.sendSelfNotification(
+          "Hackathon Chatbot",
+          "Don't miss out on the latest updates! Join us now.",
+          "https://example.com"
+        );
+      });
+    }
+  </script>
+</body>
+</html>
+<!-- changes -->
+ <!-- updates -->

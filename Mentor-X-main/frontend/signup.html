@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+        /* updates */
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #4caf50;
+        }
+
+        label {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"], input[type="password"], input[type="email"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4caf50;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .optional {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .message {
+            font-size: 1rem;
+            color: green;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .error-message {
+            font-size: 1rem;
+            color: red;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Signup</h2>
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone_no">Phone Number:</label>
+                <input type="text" id="phone_no" name="phone_no" required pattern="^[0-9]{10}$" title="Phone number should be 10 digits.">
+                <span id="phoneError" class="error-message" style="display:none;">Please enter a valid 10-digit phone number.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="college_name">College Name:</label>
+                <input type="text" id="college_name" name="college_name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="city">City:</label>
+                <select id="city" name="city" required onchange="toggleOtherCityInput()">
+                    <option value="">Select City</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Bengaluru">Bengaluru</option>
+                    <option value="Chennai">Chennai</option>
+                    <option value="Kolkata">Kolkata</option>
+                    <option value="Hyderabad">Hyderabad</option>
+                    <option value="Pune">Pune</option>
+                    <option value="Ahmedabad">Ahmedabad</option>
+                    <option value="Jaipur">Jaipur</option>
+                    <option value="Chandigarh">Chandigarh</option>
+                    <option value="Other">Other</option>
+                </select>
+                <input type="text" id="otherCity" name="otherCity" style="display:none;" placeholder="Please specify your city">
+            </div>
+
+            <div class="form-group">
+                <label for="skills">Skills:</label>
+                <input type="text" id="skills" name="skills" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password_hash">Password:</label>
+                <input type="password" id="password_hash" name="password_hash" required minlength="6" title="Password should be at least 6 characters.">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email ID (Required):</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group optional">
+                <label for="github_id">GitHub ID (Optional):</label>
+                <input type="text" id="github_id" name="github_id">
+            </div>
+
+            <div class="form-group optional">
+                <label for="linkedin_id">LinkedIn ID (Optional):</label>
+                <input type="text" id="linkedin_id" name="linkedin_id">
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="shareProfiles" name="shareProfiles"> I would like to share my GitHub and LinkedIn profiles.
+                </label>
+            </div>
+
+            <button type="submit">Signup</button>
+        </form>
+        <div class="message" id="responseMessage"></div>
+    </div>
+
+    <script>
+        // Show "Other" city input when selected
+        function toggleOtherCityInput() {
+            const cityDropdown = document.getElementById('city');
+            const otherCityInput = document.getElementById('otherCity');
+            if (cityDropdown.value === 'Other') {
+                otherCityInput.style.display = 'inline';
+            } else {
+                otherCityInput.style.display = 'none';
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('signupForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent page reload on form submission
+
+            // Phone number validation
+            const phoneNo = document.getElementById('phone_no').value;
+            const phoneError = document.getElementById('phoneError');
+            const phonePattern = /^[0-9]{10}$/;
+            if (!phonePattern.test(phoneNo)) {
+                phoneError.style.display = 'inline';
+                return;
+            } else {
+                phoneError.style.display = 'none';
+            }
+
+            // Handle other city input if selected
+            const city = document.getElementById('city').value === 'Other' 
+                ? document.getElementById('otherCity').value 
+                : document.getElementById('city').value;
+
+            const formData = {
+                name: document.getElementById('name').value,
+                phone_no: phoneNo,
+                college_name: document.getElementById('college_name').value,
+                city: city,
+                skills: document.getElementById('skills').value,
+                password_hash: document.getElementById('password_hash').value,
+                email: document.getElementById('email').value,
+                github_id: document.getElementById('github_id').value,
+                linkedin_id: document.getElementById('linkedin_id').value,
+                shareProfiles: document.getElementById('shareProfiles').checked
+            };
+
+            fetch('http://localhost:5000/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('responseMessage').innerText = data.message;
+                if (data.message === "User signed up successfully!") {
+                    document.getElementById('signupForm').reset(); // Optionally clear the form fields
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('responseMessage').innerText = "An error occurred. Please try again.";
+            });
+        });
+    </script>
+</body>
+</html>
+<!-- changes done -->
